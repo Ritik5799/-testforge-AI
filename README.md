@@ -166,8 +166,6 @@ npm run dev
 
 ## 👥 Team
 
-Add your team members and roles here:
-
 - **Project lead:** Ritik Kumar
 - **Frontend:** Prince
 - **Backend / Playwright:** Sanyam Singh
