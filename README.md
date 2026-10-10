@@ -175,10 +175,10 @@ npm run dev
 
 Add your team members and roles here:
 
-- **Project lead:** Your name
-- **Frontend:** Team member
-- **Backend / Playwright:** Team member
-- **Healing engine / AI:** Team member
+- **Project lead:** Ritik Kumar
+- **Frontend:** Prince
+- **Backend / Playwright:** Sanyam Singh
+- **Healing engine / AI:** Siddhant Pachauri
 
 ## 🤝 Contributing
 
@@ -187,9 +187,6 @@ Add your team members and roles here:
 3. Run the relevant tests.
 4. Open a pull request describing the change and test evidence.
 
-## 📄 License
-
-No license has been selected yet. Add a `LICENSE` file before presenting this repository as open source, and choose a license appropriate for your team and institution.
 
 ## 🙌 Acknowledgements
 
