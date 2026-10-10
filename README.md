@@ -157,19 +157,6 @@ npm run dev
 - Keep original test definitions and repaired versions separate for traceability.
 - Treat AI suggestions as candidates; browser evidence determines whether the test passed.
 
-## 🗺️ Roadmap
-
-- [ ] Build a controlled demo app with original and modified UI versions
-- [ ] Execute baseline tests using Playwright
-- [ ] Detect locator failures and capture diagnostics
-- [ ] Inspect candidate elements and score replacements
-- [ ] Add confidence thresholds and human-review handling
-- [ ] Verify intended outcomes after healing
-- [ ] Add application-failure scenarios
-- [ ] Create a dashboard for execution logs and healing history
-- [ ] Add optional LLM-based intent interpretation
-- [ ] Add automated tests and performance measurements
-
 ## 👥 Team
 
 Add your team members and roles here:
