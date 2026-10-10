@@ -9,6 +9,7 @@ export default function HealingStudio() {
   const [run, setRun] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const isWebsiteRun = run?.scenario === "website";
 
   const load = useCallback(async () => {
     try {
@@ -49,37 +50,50 @@ export default function HealingStudio() {
       ) : (
         <>
           <section className="studio-title-row">
-            <div><div className="eyebrow"><Sparkles size={14} /> REPAIR INSPECTOR</div><h1>{run.testName}</h1><p className="page-description">Review the failure, proposed replacement, and final verification.</p></div>
+            <div><div className="eyebrow"><Sparkles size={14} /> {isWebsiteRun ? "WEBSITE TEST REPORT" : "REPAIR INSPECTOR"}</div><h1>{run.testName}</h1><p className="page-description">{isWebsiteRun ? "Review the browser agent’s assessment and the evidence it observed." : "Review the failure, proposed replacement, and final verification."}</p></div>
             <StatusBadge status={run.status} />
           </section>
 
           <div className="studio-meta">
             <div><span>RUN ID</span><strong title={run.id}>{run.id.slice(0, 8)}…</strong><button className="tiny-icon" onClick={() => copy(run.id)} aria-label="Copy run ID"><Copy size={13} /></button></div>
             <div><span>STARTED</span><strong>{run.createdAt ? new Date(run.createdAt).toLocaleString() : "—"}</strong></div>
-            <div><span>CONFIDENCE</span><strong>{typeof run.confidence === "number" ? `${Math.round(run.confidence * 100)}%` : "—"}</strong></div>
+            <div><span>{isWebsiteRun ? "RUN TYPE" : "CONFIDENCE"}</span><strong>{isWebsiteRun ? "AI browser test" : typeof run.confidence === "number" ? `${Math.round(run.confidence * 100)}%` : "—"}</strong></div>
           </div>
 
           <div className="studio-grid">
-            <section className="panel">
+            {isWebsiteRun ? (
+              <section className="panel website-goal-panel">
+                <div className="panel-heading"><div className="panel-icon blue"><FileSearch size={17} /></div><div><h2>Test target and goal</h2><p>Website and expected behavior you provided</p></div></div>
+                <div className="detail-label">WEBSITE</div>
+                <div className="detail-box"><a href={run.websiteUrl} target="_blank" rel="noreferrer">{run.websiteUrl}</a></div>
+                <div className="detail-label">GOAL</div><div className="detail-box">{run.goal}</div>
+                {run.openApiSpecName && <><div className="detail-label">OPENAPI CONTEXT</div><div className="detail-box">{run.openApiSpecName} · provided as browser-test context only</div></>}
+                <p className="helper-note">The site content and goal were sent to OpenAI. This is an AI assessment, not a guarantee of correctness.</p>
+              </section>
+            ) : (
+              <>
+                <section className="panel">
               <div className="panel-heading"><div className="panel-icon red"><CircleAlert size={17} /></div><div><h2>Original failure</h2><p>What caused the test to stop?</p></div></div>
               <div className="detail-label">FAILURE REASON</div><div className="detail-box">{run.failureReason || (run.status === "healed" ? "No outstanding failure. Test outcome verified." : "Waiting for runner result.")}</div>
               <div className="detail-label">ORIGINAL SELECTOR</div>
               <div className="code-box"><code>{run.oldSelector || "—"}</code><button onClick={() => copy(run.oldSelector)} aria-label="Copy original selector"><Copy size={14} /></button></div>
-            </section>
+                </section>
 
-            <section className="panel">
+                <section className="panel">
               <div className="panel-heading"><div className="panel-icon violet"><Sparkles size={17} /></div><div><h2>Healing proposal</h2><p>Candidate selected by the runner</p></div></div>
               <div className="detail-label">REPLACEMENT SELECTOR</div>
               <div className="code-box"><code>{run.newSelector || "No replacement applied"}</code>{run.newSelector && <button onClick={() => copy(run.newSelector)} aria-label="Copy replacement selector"><Copy size={14} /></button>}</div>
               <div className="confidence-row"><span>Candidate confidence</span><strong>{typeof run.confidence === "number" ? `${Math.round(run.confidence * 100)}%` : "Pending"}</strong></div>
               <p className="helper-note">Confidence is not proof of success. The expected outcome must pass too.</p>
-            </section>
+                </section>
+              </>
+            )}
 
             <section className="panel verification-panel">
-              <div className="panel-heading"><div className={`panel-icon ${run.verified ? "green" : "blue"}`}>{run.verified ? <CheckCircle2 size={17} /> : <ShieldCheck size={17} />}</div><div><h2>Outcome verification</h2><p>Did the intended behavior actually succeed?</p></div></div>
+              <div className="panel-heading"><div className={`panel-icon ${run.verified ? "green" : "blue"}`}>{run.verified ? <CheckCircle2 size={17} /> : <ShieldCheck size={17} />}</div><div><h2>{isWebsiteRun ? "Agent assessment" : "Outcome verification"}</h2><p>{isWebsiteRun ? "AI assessment based on the latest page evidence; review before relying on it." : "Did the intended behavior actually succeed?"}</p></div></div>
               <div className={`verification-result ${run.verified ? "verified" : "not-verified"}`}>
                 {run.verified ? <CheckCircle2 size={19} /> : <CircleAlert size={19} />}
-                <div><strong>{run.verified ? "Verified" : run.status === "running" ? "Verification in progress" : "Not verified"}</strong><p>{run.summary || "Waiting for test runner."}</p></div>
+                <div><strong>{isWebsiteRun ? run.verified ? "AI reports goal passed" : run.status === "running" ? "Agent is testing" : "AI did not verify the goal" : run.verified ? "Verified" : run.status === "running" ? "Verification in progress" : "Not verified"}</strong><p>{run.summary || "Waiting for test runner."}</p></div>
               </div>
             </section>
 

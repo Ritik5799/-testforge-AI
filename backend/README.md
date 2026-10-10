@@ -20,6 +20,7 @@ Windows PowerShell alternative for environment file:
 ```powershell
 Copy-Item .env.example .env
 ```
+Set `OPENAI_API_KEY` in `backend/.env` to enable user-provided website tests. `OPENAI_MODEL` defaults to `gpt-4o-mini`. Never put the API key in the frontend or commit it.
 Server: `http://localhost:5000`
 Health check: `http://localhost:5000/api/health`
 Demo page: `http://localhost:5000/demo/checkout.html`
@@ -52,13 +53,26 @@ Returns `{ "runs": [...] }`.
 Returns one run object, including `logs`.
 
 ### `POST /api/runs`
-Start a Playwright test asynchronously. Returns HTTP `202`; poll `GET /api/runs/:id` until status is not `running`.
+Start a built-in demo or a user-provided website test asynchronously. Returns HTTP `202`; poll `GET /api/runs/:id` until status is not `running`.
 
-Request:
+Demo request:
 ```json
 { "scenario": "healable" }
 ```
 Allowed scenarios: `healable`, `app-failure`, `ambiguous`.
+
+Website test request:
+```json
+{
+  "websiteUrl": "https://example.com",
+  "goal": "Open the pricing page and check that the plan cards are visible.",
+  "openApiSpecUrl": "https://example.com/openapi.json"
+}
+```
+
+Instead of `openApiSpecUrl`, a client may send `openApiSpecText` (up to 50,000 characters) and an optional `openApiSpecName` for an uploaded JSON/YAML file. The optional spec is context for the browser test only; the agent does not call API endpoints from it. Website tests require `OPENAI_API_KEY`.
+
+The agent gets at most eight tool turns and can inspect pages, click visible buttons/links, fill text/search fields, and choose dropdown options. It is restricted to public HTTP(S) sites and same-origin page navigation. It does not log in, submit forms, or perform purchase, deletion, messaging, booking, or other consequential actions. Website text, the goal, and an optional spec are sent to OpenAI. Its pass/fail status is an AI assessment of visible page evidence, not a formal guarantee.
 
 Response:
 ```json
@@ -105,4 +119,4 @@ Dashboard stats are under `response.stats`; recent runs are under `response.rece
 - This is a hackathon-ready local demo, not yet a production test platform.
 - JSON file storage is suitable for a single local server; use a database for concurrent/multi-instance production use.
 - The demo healing rule uses accessible button text and a uniqueness check. It is intentionally conservative; it is not a general-purpose AI locator repair engine.
-- To test your own website, add a trusted test definition and explicit expected outcomes. Do not blindly click the highest-scoring candidate or mark a test healed without verifying the actual outcome.
+- The general website agent is bounded and intentionally avoids authentication and consequential actions. Do not rely on its AI assessment as a substitute for deterministic assertions in production tests.

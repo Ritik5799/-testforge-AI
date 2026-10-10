@@ -14,7 +14,7 @@ export default function RunRow({ run }) {
         <strong>{run.testName || "Untitled test"}</strong>
         <small><Clock3 size={12} /> {date ? new Date(date).toLocaleString() : "Just now"}</small>
       </span>
-      <span className="run-selector">{run.oldSelector || "—"}</span>
+      <span className="run-selector" title={run.websiteUrl || run.oldSelector || ""}>{run.websiteUrl || run.oldSelector || "—"}</span>
       <StatusBadge status={run.status} />
       <ArrowUpRight size={16} className="run-open" />
     </button>

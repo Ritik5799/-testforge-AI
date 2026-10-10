@@ -25,5 +25,8 @@ export const getRuns = async () => {
   return data.runs || [];
 };
 export const getRun = (id) => request(`/runs/${encodeURIComponent(id)}`);
-export const startRun = (scenario = "healable") =>
-  request("/runs", { method: "POST", body: JSON.stringify({ scenario }) });
+export const startRun = (input = "healable") =>
+  request("/runs", {
+    method: "POST",
+    body: JSON.stringify(typeof input === "string" ? { scenario: input } : input)
+  });

@@ -55,6 +55,8 @@ The original selector no longer works. TestForge_AI should inspect the updated p
 
 A second scenario should introduce a genuine application error. The system should report the failure rather than blindly changing selectors or claiming the test passed.
 
+The dashboard also supports a public website URL plus a plain-language test goal. An optional OpenAPI JSON/YAML file or URL can provide browser-test context. This feature requires an OpenAI API key configured in the backend; it runs a bounded browser agent and reports an AI assessment of visible evidence. It does not log in, submit forms, or perform destructive or consequential actions.
+
 ## 🏗️ Proposed architecture
 
 ```text
@@ -100,8 +102,6 @@ The stack may change as implementation progresses. A deterministic healing path 
 
 ## 🚀 Getting started
 
-This repository is intended to contain the implementation. Update these instructions to match the files and scripts actually committed.
-
 ### Prerequisites
 
 - Node.js (use a current LTS release)
@@ -111,24 +111,31 @@ This repository is intended to contain the implementation. Update these instruct
 
 ### Installation
 
-```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_REPOSITORY_FOLDER>
+```powershell
+cd backend
 npm install
-npx playwright install
+Copy-Item .env.example .env
+npx playwright install chromium
 ```
 
-If the frontend and backend live in separate directories, install dependencies in each directory and follow their respective `package.json` scripts.
+Set `OPENAI_API_KEY` in `backend/.env` to enable custom website tests. Keep the key on the backend; never add it to frontend configuration.
 
 ### Run
 
-Once the project's scripts are implemented, use the commands defined in `package.json`. For example, a project may provide:
+Start the backend:
 
-```bash
+```powershell
+cd backend
 npm run dev
 ```
 
-**Note:** The command above is an example, not a guarantee that this script already exists. Check `package.json` and replace this section with the verified commands before publishing.
+In another terminal, start the frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
 
 ## 📊 Example test intent
 
