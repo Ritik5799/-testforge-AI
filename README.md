@@ -1,7 +1,7 @@
-# HealTest AI 🧪
+# TestForge_AI 🧪
 ### Intent-aware, self-healing end-to-end tests
 
-HealTest AI is a hackathon prototype designed to help automated browser tests survive interface changes. Instead of relying only on fixed selectors, a test records **what it is trying to accomplish**, inspects the current UI when an action fails, searches for a suitable replacement, and verifies that the original goal was achieved.
+TestForge_AI is a hackathon prototype designed to help automated browser tests survive interface changes. Instead of relying only on fixed selectors, a test records **what it is trying to accomplish**, inspects the current UI when an action fails, searches for a suitable replacement, and verifies that the original goal was achieved.
 
 > **Project status:** Hackathon prototype / proof of concept. Capabilities and results depend on the implementation and test environment.
 
@@ -13,7 +13,7 @@ However, not every failed test is caused by a UI change. The application itself 
 
 ## 💡 Proposed solution
 
-HealTest AI aims to:
+TestForge_AI aims to:
 
 1. Store each test's **intent** and expected outcome, not just its selectors.
 2. Use browser automation to inspect the current page and its available elements.
@@ -52,7 +52,7 @@ The original test clicks `#checkout-button` and verifies that the checkout page 
 <button id="continue-payment">Continue to Payment</button>
 ```
 
-The original selector no longer works. HealTest AI should inspect the updated page, identify the likely replacement from the test's intent, perform the action when confidence is sufficient, and verify that the expected checkout page appears.
+The original selector no longer works. TestForge_AI should inspect the updated page, identify the likely replacement from the test's intent, perform the action when confidence is sufficient, and verify that the expected checkout page appears.
 
 A second scenario should introduce a genuine application error. The system should report the failure rather than blindly changing selectors or claiming the test passed.
 
