@@ -3,7 +3,6 @@
 
 TestForge_AI is a hackathon prototype designed to help automated browser tests survive interface changes. Instead of relying only on fixed selectors, a test records **what it is trying to accomplish**, inspects the current UI when an action fails, searches for a suitable replacement, and verifies that the original goal was achieved.
 
-> **Project status:** Hackathon prototype / proof of concept. Capabilities and results depend on the implementation and test environment.
 
 ## 🚩 Problem
 
